@@ -1,0 +1,34 @@
+# SuiteCRM specific
+cache/
+upload/
+custom/modules/*/Ext/
+custom/application/Ext/
+custom/Extension/application/Ext/Include/
+config_override.php
+config.php
+sugarcrm.log
+install.log
+upgradeWizard.log
+emailman.log
+.htaccess
+
+# Development
+.env
+.env.local
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependencies
+vendor/
+node_modules/
+
+# Database
+*.sql.gz
+backup/
+
+# Docker
+mysql_data/

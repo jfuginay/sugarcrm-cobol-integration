@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: suitecrm-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: suitecrm
+      MYSQL_USER: suitecrm
+      MYSQL_PASSWORD: suitecrm
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  suitecrm:
+    image: bitnami/suitecrm:latest
+    container_name: suitecrm
+    restart: always
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      - SUITECRM_DATABASE_HOST=mysql
+      - SUITECRM_DATABASE_USER=suitecrm
+      - SUITECRM_DATABASE_PASSWORD=suitecrm
+      - SUITECRM_DATABASE_NAME=suitecrm
+      - SUITECRM_USERNAME=admin
+      - SUITECRM_PASSWORD=admin123
+      - SUITECRM_EMAIL=admin@example.com
+      - PHP_MEMORY_LIMIT=512M
+    volumes:
+      - ./SuiteCRM:/bitnami/suitecrm
+      - ./custom:/bitnami/suitecrm/custom
+    depends_on:
+      - mysql
+
+  cobol-api:
+    build: ../cobol-credit-api
+    container_name: cobol-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    volumes:
+      - ../cobol-credit-api:/app
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: suitecrm-phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
