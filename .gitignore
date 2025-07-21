@@ -31,4 +31,4 @@ node_modules/
 backup/
 
 # Docker
-mysql_data/
+mysql_data/SuiteCRM/
